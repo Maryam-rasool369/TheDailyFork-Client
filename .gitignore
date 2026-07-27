@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# extra added by me 
+Thumbs.db
+.env
+.env.*
+!.env.example
