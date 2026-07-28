@@ -7,6 +7,9 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logos/LogoSmall.png"
+import AuthHero from "../../components/auth/AuthHero";
+import AuthButtons from "../../components/auth/AuthButtons";
+import TermsConditionsPrivacy from "../../components/auth/TermsConditionsPrivacy";
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -47,37 +50,7 @@ const Login: React.FC = () => {
             </div>
 
             {/* Social Login */}
-            <div className="mt-10 space-y-4">
-
-              {/* Google */}
-              <button
-                type="button"
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-2 font-medium text-ink transition hover:border-purple hover:bg-purple/5"
-              >
-                <img
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  alt="Google"
-                  className="h-5 w-5"
-                />
-
-                Continue with Google
-              </button>
-
-              {/* Facebook */}
-              <button
-                type="button"
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-2 font-medium text-ink transition hover:border-purple hover:bg-purple/5"
-              >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
-                  alt="Facebook"
-                  className="h-5 w-5"
-                />
-
-                Continue with Facebook
-              </button>
-
-            </div>
+            <AuthButtons />
 
             {/* Divider */}
             <div className="my-8 flex items-center gap-4">
@@ -108,7 +81,7 @@ const Login: React.FC = () => {
                     id="email"
                     type="email"
                     placeholder="Enter your email"
-                    className="w-full bg-transparent px-3 py-3 outline-none placeholder:text-gray-400"
+                    className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                   />
                 </div>
               </div>
@@ -129,7 +102,7 @@ const Login: React.FC = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    className="w-full bg-transparent px-3 py-3 outline-none placeholder:text-gray-400"
+                    className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                   />
 
                   <button
@@ -148,12 +121,12 @@ const Login: React.FC = () => {
 
               {/* Forgot Password */}
               <div className="flex justify-end">
-                <a
-                  href="#"
+                <Link
+                  to="/forget-password"
                   className="text-sm font-medium text-purple transition hover:text-moss"
                 >
                   Forgot Password?
-                </a>
+                </Link>
               </div>
 
               {/* Login Button */}
@@ -161,108 +134,27 @@ const Login: React.FC = () => {
                 type="submit"
                 className="w-full rounded-xl bg-purple py-3 font-semibold text-white transition duration-200 hover:bg-purple/90 active:scale-[0.98]"
               >
-                Sign In
+                Login
               </button>
 
               {/* Sign Up */}
               <p className="text-center text-sm text-ink/70">
                 Don't have an account?{" "}
-                <a
-                  href="#"
+                <Link
+                  to="/signup"
                   className="font-semibold text-purple transition hover:text-moss"
                 >
                   Sign Up
-                </a>
+                </Link>
               </p>
 
               {/* Terms */}
-              <p className="text-center text-xs leading-6 text-gray-500">
-                By continuing, you agree to our{" "}
-                <a
-                  href="#"
-                  className="font-medium text-purple hover:underline"
-                >
-                  Terms of Service
-                </a>{" "}
-                and{" "}
-                <a
-                  href="#"
-                  className="font-medium text-purple hover:underline"
-                >
-                  Privacy Policy
-                </a>
-                .
-              </p>
-
+              <TermsConditionsPrivacy />
             </form>
           </div>
         </div>
 
-        {/* ================= Right Side ================= */}
-        <div className="relative hidden lg:flex lg:w-1/2">
-
-          {/* Background Image */}
-          <img
-            src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=1200&q=80"
-            alt="Reading books"
-            className="h-full w-full object-cover"
-          />
-
-          {/* Dark Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-ink/85 via-ink/60 to-purple/70" />
-
-          {/* Decorative Badge */}
-          <div className="absolute right-8 top-8">
-            <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-md">
-              ✨ Join 25,000+ Readers
-            </span>
-          </div>
-
-          {/* Content */}
-          <div className="absolute inset-0 flex flex-col justify-end p-12 text-white">
-
-            <span className="mb-4 w-fit rounded-full bg-moss px-4 py-2 text-sm font-semibold uppercase tracking-widest text-ink">
-              Featured Stories
-            </span>
-
-            <h2 className="max-w-lg text-5xl font-bold leading-tight">
-              Read.
-              <br />
-              Learn.
-              <br />
-              Grow.
-            </h2>
-
-            <p className="mt-6 max-w-md text-lg leading-8 text-white/80">
-              Explore thousands of articles, tutorials and inspiring stories
-              written by developers, designers and creators from around the
-              world.
-            </p>
-
-            <div className="mt-10 flex items-center gap-6">
-
-              <div>
-                <h3 className="text-3xl font-bold">20K+</h3>
-                <p className="text-sm text-white/70">
-                  Articles Published
-                </p>
-              </div>
-
-              <div className="h-10 w-px bg-white/20" />
-
-              <div>
-                <h3 className="text-3xl font-bold">50K+</h3>
-                <p className="text-sm text-white/70">
-                  Active Readers
-                </p>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
+        <AuthHero />
       </div>
     </section>
   );

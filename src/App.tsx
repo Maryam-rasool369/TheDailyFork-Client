@@ -12,6 +12,9 @@ import MainLayout from './layouts/MainLayout'
 import AuthLayout from './layouts/AuthLayout'
 import Login from './pages/auth/Login'
 import SignUp from './pages/auth/SignUp'
+import TermsConditions from './pages/TermsConditions'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import CreateBlogs from './pages/CreateBlogs'
 
 function App() {
 
@@ -26,6 +29,10 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/create-blog" element={<CreateBlogs />} />
+            <Route path='/terms-conditions' element={<TermsConditions />} />
+            <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+
           </Route>
 
           <Route element={<AuthLayout />}>
