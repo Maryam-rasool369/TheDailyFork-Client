@@ -1,6 +1,6 @@
 import React from "react";
 
-const AboutStory = () => {
+const AboutStory:React.FC = () => {
   return (
     <section className="rounded-section mt-section bg-purple-soft px-6 py-12 md:px-10 lg:px-16">
       {/* Statistics */}

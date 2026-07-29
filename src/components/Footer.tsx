@@ -64,7 +64,7 @@ const Footer = () => {
 
       <div className="border-t border-white/10 py-6">
         <p className=" text-xs text-white/40">
-          © 2026 Indigo. All rights reserved.
+          © 2026 Scribbly. All rights reserved.
         </p>
       </div>
     </footer>

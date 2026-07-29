@@ -159,7 +159,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
                 {profileOpen && (
                   <div className="absolute top-full right-0 mt-3 w-48 bg-cloud border border-gray-100 shadow-lg rounded-xl py-2 flex flex-col">
                     <Link
-                      to="/profile/edit"
+                      to="/edit-profile"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-sm  hover:text-purple transition-colors"
                     >
@@ -167,12 +167,12 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
                        Edit profile
                     </Link>
                     <Link
-                      to="/profile/blogs"
+                      to="/my-blogs"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-sm hover:text-purple transition-colors"
                     >
                       <NotebookText className="w-4 h-4" /> 
-                      Your blogs
+                      My blogs
                     </Link>
                     <button
                       onClick={() => {
