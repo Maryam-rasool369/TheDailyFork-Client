@@ -81,7 +81,7 @@ const UsefulTips:React.FC = () => {
 
             return (
               <SwiperSlide key={tip.title}>
-                <div className="flex h-[320px] flex-col rounded-3xl bg-white/5 p-8 transition duration-300 hover:bg-white/10">
+                <div className="flex h-80 flex-col rounded-3xl bg-white/5 p-8 transition duration-300 hover:bg-white/10">
                   <Icon className="h-16 w-16 text-cloud/70" />
 
                   <h3 className="mt-8 text-3xl font-semibold">

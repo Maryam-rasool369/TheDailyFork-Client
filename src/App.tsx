@@ -14,7 +14,11 @@ import Login from './pages/auth/Login'
 import SignUp from './pages/auth/SignUp'
 import TermsConditions from './pages/TermsConditions'
 import PrivacyPolicy from './pages/PrivacyPolicy'
-import CreateBlogs from './pages/CreateBlogs'
+import CreateBlogs from './pages/CreateBlog'
+import MyBlogs from './pages/MyBlogs'
+import EditBlog from './pages/EditBlog'
+import EditPofile from './pages/EditPofile'
+import BlogDetail from './pages/BlogDetail'
 
 function App() {
 
@@ -29,7 +33,12 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path="/create-blog" element={<CreateBlogs />} />
+            <Route path="/my-blogs" element={<MyBlogs />} />
+            <Route path="/blog/:id/edit" element={<EditBlog />} />
+            <Route path="/edit-profile" element={<EditPofile />} />
+
             <Route path='/terms-conditions' element={<TermsConditions />} />
             <Route path='/privacy-policy' element={<PrivacyPolicy />} />
 

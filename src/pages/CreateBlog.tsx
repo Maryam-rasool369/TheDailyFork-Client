@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { ImagePlus } from "lucide-react";
+import type { BlogCategory } from "../types/BlogsType";
 
+const categories: BlogCategory[] = [
+  "Fashion",
+  "Food",
+  "Health",
+  "History",
+  "Politics",
+  "Tech",
+  "Travel",
+];
 const CreateBlog: React.FC = () => {
+
+  const [category, setCategory] = useState<BlogCategory>();
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
   return (
     <section className="bg-cloud py-12">
       <div className="mx-auto max-w-5xl rounded-2xl bg-white p-8 shadow-sm lg:p-12">
@@ -39,50 +54,107 @@ const CreateBlog: React.FC = () => {
             </label>
 
             <select
+              onChange={(e) =>
+                setCategory(e.target.value as BlogCategory)
+              }
               className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 outline-none transition focus:border-purple focus:ring-2 focus:ring-purple/20"
               defaultValue=""
-            >
-              <option value="" disabled>
-                Select a category
-              </option>
+              value={category}
 
-              <option>Fashion</option>
-              <option>Food</option>
-              <option>Health</option>
-              <option>History</option>
-              <option>Politics</option>
-              <option>Tech</option>
-              <option>Travel</option>
+            >
+
+              {
+                categories.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))
+              }
+
             </select>
+
           </div>
 
           {/* Featured Image */}
           <div>
+
             <label className="mb-2 block text-sm font-semibold text-ink">
               Featured Image
             </label>
 
-            <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 px-6 py-12 transition hover:border-purple hover:bg-purple/5">
+            <label className="group relative flex cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 transition hover:border-purple">
+              {
+                imagePreview ? (
 
-              <ImagePlus className="mb-4 h-12 w-12 text-purple" />
+                  <>
+                    {/* Preview */}
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="h-72 w-full object-cover transition duration-300 group-hover:scale-105"/>
 
-              <span className="font-medium text-ink">
-                Click to upload an image
-              </span>
+                    {/* Hover Overlay */}
+                    <div className=" absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-all duration-300 group-hover:opacity-100" >
 
-              <span className="mt-1 text-sm text-gray-500">
-                PNG, JPG or WEBP
-              </span>
+                      <ImagePlus
+                        size={48}
+                        className="mb-3 text-white"
+                      />
+
+                      <span className="font-semibold text-white">
+                        Change Image
+                      </span>
+
+                      <span className="mt-1 text-sm text-gray-200">
+                        Click to upload another image
+                      </span>
+
+                    </div>
+                  </>
+
+                ) : (
+
+                  <div className="flex flex-col items-center px-6 py-14">
+
+                    <ImagePlus
+                      className="mb-4 h-12 w-12 text-purple"
+                    />
+
+                    <span className="font-medium text-ink">
+                      Click to upload an image
+                    </span>
+
+                    <span className="mt-1 text-sm text-gray-500">
+                      PNG, JPG or WEBP
+                    </span>
+
+                  </div>
+
+                )
+              }
 
               <input
                 type="file"
                 accept="image/*"
                 className="hidden"
+                onChange={(e) => {
+
+                  const file = e.target.files?.[0];
+
+                  if (!file) return;
+
+                  setImageFile(file);
+                  setImagePreview(URL.createObjectURL(file));
+
+                }}
               />
 
             </label>
-          </div>
 
+          </div>
           {/* Description */}
           <div>
             <label className="mb-2 block text-sm font-semibold text-ink">
