@@ -1,5 +1,5 @@
 import React from "react";
-import { FileText, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface EmptyStateProps {
