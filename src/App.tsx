@@ -20,6 +20,7 @@ import EditBlog from './pages/EditBlog'
 import EditPofile from './pages/EditPofile'
 import BlogDetail from './pages/BlogDetail'
 import ForgetPassword from './pages/auth/ForgetPassword'
+import ResetPassword from './pages/auth/ResetPassword'
 
 function App() {
 
@@ -49,6 +50,8 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/forget-password' element={<ForgetPassword />} />
+            <Route path='/reset-password' element={<ResetPassword />} />
+
           </Route>
 
         </Routes>
