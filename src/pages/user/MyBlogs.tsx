@@ -1,7 +1,7 @@
 import React from 'react'
-import BlogGrid from '../components/blog/BlogGrid'
-import { blogs } from '../data/BlogsData'
-import EmptyState from '../components/blog/EmptyState'
+import BlogGrid from '../../components/blog/BlogGrid'
+import { blogs } from '../../data/BlogsData'
+import EmptyState from '../../components/blog/EmptyState'
 
 const MyBlogs: React.FC = () => {
     if (blogs.length === 0) {

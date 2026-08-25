@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
-import BlogGrid from "../components/blog/BlogGrid";
-import EmptyState from "../components/blog/EmptyState";
-import { blogs } from "../data/BlogsData";
+import BlogGrid from "../../components/blog/BlogGrid";
+import EmptyState from "../../components/blog/EmptyState";
+import { blogs } from "../../data/BlogsData";
 import { useSearchParams } from "react-router-dom";
 
 const categories = [

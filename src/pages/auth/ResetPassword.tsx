@@ -1,12 +1,39 @@
 import React, { useState } from "react";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import logo from "../../assets/logos/LogoSmall.png"
+import { useAuth } from "../../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { resetPasswordSchema, type ResetPasswordFormData } from "../../validations/auth.validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
 
 const ResetPassword: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    const { resetPassword } = useAuth();
+
+    const [searchParams] = useSearchParams();
+
+    const token = searchParams.get("token");
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<ResetPasswordFormData>({
+        resolver: zodResolver(resetPasswordSchema),
+    });
+
+    const onSubmit = async (data: ResetPasswordFormData) => {
+        if (!token) {
+            toast.error("Invalid or missing reset token");
+            return;
+        }
+
+        await resetPassword(token, data);
+    };
     return (
         <section className="min-h-screen bg-cloud">
             <div className="grid min-h-screen w-full lg:grid-cols-2">
@@ -47,7 +74,9 @@ const ResetPassword: React.FC = () => {
                         </div>
 
                         {/* Form */}
-                        <form className="mt-10 space-y-6">
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="mt-10 space-y-6">
                             {/* New Password */}
                             <div>
                                 <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -57,36 +86,42 @@ const ResetPassword: React.FC = () => {
                                 <div className="relative">
 
                                     <input
+                                        {...register("newPassword")}
                                         type={showPassword ? "text" : "password"}
                                         placeholder="Enter your new password"
                                         className="
-                      w-full
-                      rounded-xl
-                      border
-                      border-gray-300
-                      px-4
-                      py-3
-                      pr-12
-                      outline-none
-                      transition
-                      focus:border-purple
-                      focus:ring-2
-                      focus:ring-purple/20
-                    "
+                                        w-full
+                                        rounded-xl
+                                        border
+                                        border-gray-300
+                                        px-4
+                                        py-3
+                                        pr-12
+                                        outline-none
+                                        transition
+                                        focus:border-purple
+                                        focus:ring-2
+                                        focus:ring-purple/20
+                                        "
                                     />
+                                    {errors.newPassword && (
+                                        <p className="mt-1 text-sm text-red-500">
+                                            {errors.newPassword.message}
+                                        </p>
+                                    )}
 
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
                                         className="
-                      absolute
-                      right-4
-                      top-1/2
-                      -translate-y-1/2
-                      text-gray-500
-                      transition
-                      hover:text-purple
-                    "
+                                        absolute
+                                        right-4
+                                        top-1/2
+                                        -translate-y-1/2
+                                        text-gray-500
+                                        transition
+                                        hover:text-purple
+                                        "
                                     >
                                         {showPassword ? (
                                             <EyeOff size={20} />
@@ -112,38 +147,43 @@ const ResetPassword: React.FC = () => {
                                 <div className="relative">
 
                                     <input
+                                        {...register("confirmPassword")}
                                         type={showConfirmPassword ? "text" : "password"}
                                         placeholder="Confirm your new password"
                                         className="
-                      w-full
-                      rounded-xl
-                      border
-                      border-gray-300
-                      px-4
-                      py-3
-                      pr-12
-                      outline-none
-                      transition
-                      focus:border-purple
-                      focus:ring-2
-                      focus:ring-purple/20
-                    "
+                                        w-full
+                                        rounded-xl
+                                        border
+                                        border-gray-300
+                                        px-4
+                                        py-3
+                                        pr-12
+                                        outline-none
+                                        transition
+                                        focus:border-purple
+                                        focus:ring-2
+                                        focus:ring-purple/20
+                                        "
                                     />
-
+                                    {errors.confirmPassword && (
+                                        <p className="mt-1 text-sm text-red-500">
+                                            {errors.confirmPassword.message}
+                                        </p>
+                                    )}
                                     <button
                                         type="button"
                                         onClick={() =>
                                             setShowConfirmPassword(!showConfirmPassword)
                                         }
                                         className="
-                      absolute
-                      right-4
-                      top-1/2
-                      -translate-y-1/2
-                      text-gray-500
-                      transition
-                      hover:text-purple
-                    "
+                                        absolute
+                                        right-4
+                                        top-1/2
+                                        -translate-y-1/2
+                                        text-gray-500
+                                        transition
+                                        hover:text-purple
+                                        "
                                     >
                                         {showConfirmPassword ? (
                                             <EyeOff size={20} />
@@ -157,21 +197,24 @@ const ResetPassword: React.FC = () => {
 
                             {/* Reset Password Button */}
                             <button
+                                disabled={isSubmitting}
                                 type="submit"
                                 className="
-                  w-full
-                  rounded-xl
-                  bg-purple
-                  px-6
-                  py-3.5
-                  font-semibold
-                  text-white
-                  transition
-                  hover:bg-purple/90
-                  hover:shadow-lg
-                "
+                                w-full
+                                rounded-xl
+                                bg-purple
+                                px-6
+                                py-3.5
+                                font-semibold
+                                text-white
+                                transition
+                                hover:bg-purple/90
+                                hover:shadow-lg
+                                "
                             >
-                                Reset Password
+                                {isSubmitting ? "Reseting Password..." : "Reset Password"}
+
+
                             </button>
 
                         </form>
