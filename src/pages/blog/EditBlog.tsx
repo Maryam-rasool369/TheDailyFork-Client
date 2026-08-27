@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { blogs } from "../data/BlogsData";
+import { blogs } from "../../data/BlogsData";
 import { useState } from "react";
 import { ImagePlus } from "lucide-react";
-import type { BlogCategory } from "../types/BlogsType";
+import type { BlogCategory } from "../../common/types/blogsType";
 
 const categories: BlogCategory[] = [
     "Fashion",

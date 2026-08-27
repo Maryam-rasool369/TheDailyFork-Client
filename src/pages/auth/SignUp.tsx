@@ -11,9 +11,27 @@ import logo from "../../assets/logos/LogoSmall.png"
 import AuthHero from "../../components/auth/AuthHero";
 import AuthButtons from "../../components/auth/AuthButtons";
 import TermsConditionsPrivacy from "../../components/auth/TermsConditionsPrivacy";
+import { signupSchema, type SignupFormData } from "../../validations/auth.validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../../hooks/useAuth";
+
 const Signup: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const { signup } = useAuth();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+  });
+  const onSubmit = async (data: SignupFormData) => {
+    await signup(data);
+  };
 
   return (
     <section className="min-h-screen bg-cloud">
@@ -68,7 +86,9 @@ const Signup: React.FC = () => {
             </div>
 
             {/* Form */}
-            <form className="space-y-5">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-5">
 
               {/* First & Last Name */}
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -86,11 +106,17 @@ const Signup: React.FC = () => {
                     <User className="h-5 w-5 text-gray-400" />
 
                     <input
+                      {...register("firstName")}
                       id="firstName"
                       type="text"
                       placeholder="John"
                       className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                     />
+                    {errors.firstName && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors.firstName.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -107,11 +133,17 @@ const Signup: React.FC = () => {
                     <User className="h-5 w-5 text-gray-400" />
 
                     <input
+                      {...register("lastName")}
                       id="lastName"
                       type="text"
                       placeholder="Doe"
                       className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                     />
+                    {errors.lastName && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors.lastName.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -130,11 +162,19 @@ const Signup: React.FC = () => {
                   <Mail className="h-5 w-5 text-gray-400" />
 
                   <input
+                    {...register("email")}
                     id="email"
                     type="email"
                     placeholder="Enter your email"
                     className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                   />
+
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.email.message}
+                    </p>
+                  )}
+
                 </div>
               </div>
               {/* Password */}
@@ -150,11 +190,18 @@ const Signup: React.FC = () => {
                   <Lock className="h-5 w-5 text-gray-400" />
 
                   <input
+                    {...register("password")}
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
                     className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                   />
+
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.password.message}
+                    </p>
+                  )}
 
                   <button
                     type="button"
@@ -207,10 +254,11 @@ const Signup: React.FC = () => {
 
               {/* Create Account Button */}
               <button
+                disabled={isSubmitting}
                 type="submit"
                 className="w-full rounded-xl bg-purple py-3 font-semibold text-white transition duration-200 hover:bg-purple/90 active:scale-[0.98]"
               >
-                Create Account
+                {isSubmitting ? "Creating account" : "Create"}
               </button>
 
               {/* Login Link */}

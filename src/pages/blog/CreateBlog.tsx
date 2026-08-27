@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ImagePlus } from "lucide-react";
-import type { BlogCategory } from "../types/BlogsType";
+import type { BlogCategory } from "../../common/types/blogsType";
+import BlogEditor from "../../components/blog/BlogEditor";
 
 const categories: BlogCategory[] = [
   "Fashion",
@@ -16,6 +17,7 @@ const CreateBlog: React.FC = () => {
   const [category, setCategory] = useState<BlogCategory>();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [content, setContent] = useState("");
 
   return (
     <section className="bg-cloud py-12">
@@ -94,7 +96,7 @@ const CreateBlog: React.FC = () => {
                     <img
                       src={imagePreview}
                       alt="Preview"
-                      className="h-72 w-full object-cover transition duration-300 group-hover:scale-105"/>
+                      className="h-72 w-full object-cover transition duration-300 group-hover:scale-105" />
 
                     {/* Hover Overlay */}
                     <div className=" absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-all duration-300 group-hover:opacity-100" >
@@ -169,15 +171,15 @@ const CreateBlog: React.FC = () => {
           </div>
 
           {/* Blog Content */}
+          {/* Blog Content */}
           <div>
             <label className="mb-2 block text-sm font-semibold text-ink">
               Blog Content
             </label>
 
-            <textarea
-              rows={14}
-              placeholder="Start writing your article..."
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-purple focus:ring-2 focus:ring-purple/20"
+            <BlogEditor
+              value={content}
+              onChange={setContent}
             />
           </div>
 

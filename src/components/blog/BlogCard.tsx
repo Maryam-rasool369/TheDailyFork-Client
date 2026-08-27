@@ -1,6 +1,6 @@
 import React from "react";
 import { Heart, ArrowRight } from "lucide-react";
-import type { Blog } from "../../types/BlogsType";
+import type { Blog } from "../../common/types/blogsType";
 
 interface BlogCardProps {
     blog: Blog;

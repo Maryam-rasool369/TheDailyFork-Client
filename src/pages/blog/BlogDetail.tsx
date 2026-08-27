@@ -1,8 +1,8 @@
 import { Heart, Calendar } from "lucide-react";
-import { blogs } from "../data/BlogsData";
+import { blogs } from "../../data/BlogsData";
 import { useParams } from "react-router-dom";
 import type React from "react";
-import OwnerActions from "../components/blog/OwnerActions";
+import OwnerActions from "../../components/blog/OwnerActions";
 
 const BlogDetails: React.FC = () => {
     const { id } = useParams();

@@ -1,6 +1,6 @@
 import React from "react";
 import BlogCard from "./BlogCard";
-import type { Blog } from "../../types/BlogsType";
+import type { Blog } from "../../common/types/blogsType";
 import { Link } from "react-router-dom";
 
 interface BlogGridProps {
