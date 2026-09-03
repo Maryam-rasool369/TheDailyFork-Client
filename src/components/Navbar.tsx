@@ -1,27 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, User, LogOut, NotebookText, Pencil, Menu } from "lucide-react";
-// import HamburgerIcon from "../../assets/icons/hamburger.svg";
-import logo from "../assets/logos/LogoSmall.png"
-const BLOG_CATEGORIES = [
-  "All",
-  "Fashion",
-  "Food",
-  "Health",
-  "History",
-  "Politics",
-  "Tech",
-  "Travel",
-];
+import logo from "../assets/logos/LogoSmall.png";
+import { BLOG_CATEGORIES } from "../common/enum";
+import { useAuthStore } from "../store/authStore";
+import { useAuth } from "../hooks/useAuth";
 
-
-
-interface NavbarProps {
-  isLoggedIn?: boolean;
-  userAvatarUrl?: string;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: NavbarProps) => {
+const Navbar: React.FC = () => {
   const [blogsOpen, setBlogsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -29,6 +14,11 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
 
   const blogsRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  // Read real auth state instead of a prop
+  const user = useAuthStore((s) => s.user);
+  const isLoggedIn = !!user;
+  const { signOut } = useAuth();
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -50,35 +40,33 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
   const getStartedLink = isLoggedIn ? "/create-blog" : "/login";
   const getStartedLabel = isLoggedIn ? "Create Blog" : "Get Started";
 
+  const handleLogout = () => {
+    setProfileOpen(false);
+    signOut();
+  };
+
   return (
     <>
-      <header className="relative z-50  w-full px-4 pt-4 tracking-wide">
+      <header className="relative z-50 w-full px-4 pt-4 tracking-wide">
         <nav className="mx-auto max-w-7xl bg-ink backdrop-blur-sm border shadow-sm rounded-2xl px-5 py-3 flex items-center justify-between">
           {/* Left: Logo (desktop) / Hamburger + Logo (mobile) */}
           <div className="flex items-center gap-3">
             <button
-              className="md:hidden "
+              className="md:hidden"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
             >
-              <Menu  className="text-moss"/>
+              <Menu className="text-moss" />
             </button>
 
-            <Link
-              to="/"
-              className="flex items-center gap-2"
-            >
-              <img
-                src={logo}
-                alt="Our Web Logo"
-                className="max-w-25"
-              />
+            <Link to="/" className="flex items-center gap-2">
+              <img src={logo} alt="Our Web Logo" className="max-w-25" />
             </Link>
           </div>
 
           {/* Center: Nav links (desktop only) */}
           <div className="hidden md:flex items-center gap-8 font-body text-sm font-medium text-cloud">
-            <Link to="/" className="hover:text-purple transition-colors ">
+            <Link to="/" className="hover:text-purple transition-colors">
               Home
             </Link>
 
@@ -89,8 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
               >
                 Blogs
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform ${blogsOpen ? "rotate-180" : ""
-                    }`}
+                  className={`w-4 h-4 transition-transform ${blogsOpen ? "rotate-180" : ""}`}
                 />
               </button>
 
@@ -99,11 +86,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
                   {BLOG_CATEGORIES.map((cat) => (
                     <Link
                       key={cat}
-                      to={
-                        cat === "All"
-                          ? "/blogs"
-                          : `/blogs?category=${cat.toLowerCase()}`
-                      }
+                      to={cat === "All" ? "/blogs" : `/blogs?category=${cat.toLowerCase()}`}
                       onClick={() => setBlogsOpen(false)}
                       className="px-4 py-2 text-sm hover:bg-purple-soft hover:text-purple transition-colors"
                     >
@@ -114,16 +97,10 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
               )}
             </div>
 
-            <Link
-              to="/about"
-              className="hover:text-purple transition-colors"
-            >
+            <Link to="/about" className="hover:text-purple transition-colors">
               About
             </Link>
-            <Link
-              to="/contact"
-              className="hover:text-purple transition-colors"
-            >
+            <Link to="/contact" className="hover:text-purple transition-colors">
               Contact Us
             </Link>
           </div>
@@ -141,11 +118,11 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setProfileOpen((v) => !v)}
-                  className="w-9 h-9 rounded-full overflow-hidden  border-purple"
+                  className="w-9 h-9 rounded-full overflow-hidden border-purple"
                 >
-                  {userAvatarUrl ? (
+                  {user?.profileImage ? (
                     <img
-                      src={userAvatarUrl}
+                      src={user.profileImage}
                       alt="Profile"
                       className="w-full h-full object-cover"
                     />
@@ -161,27 +138,24 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
                     <Link
                       to="/edit-profile"
                       onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-sm  hover:text-purple transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-sm hover:text-purple transition-colors"
                     >
                       <Pencil className="w-4 h-4" />
-                       Edit profile
+                      Edit profile
                     </Link>
                     <Link
                       to="/my-blogs"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-sm hover:text-purple transition-colors"
                     >
-                      <NotebookText className="w-4 h-4" /> 
+                      <NotebookText className="w-4 h-4" />
                       My blogs
                     </Link>
                     <button
-                      onClick={() => {
-                        setProfileOpen(false);
-                        // hook up real logout logic here
-                      }}
+                      onClick={handleLogout}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-left text-red-700 hover:text-red-400 transition-colors"
                     >
-                      <LogOut className="w-4 h-4 " /> Logout
+                      <LogOut className="w-4 h-4" /> Logout
                     </button>
                   </div>
                 )}
@@ -190,9 +164,6 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
           </div>
         </nav>
       </header>
-
-      {/* Spacer so page content doesn't sit under the fixed navbar */}
-      {/* <div className="h-24" /> */}
 
       {/* Mobile sidebar */}
       {mobileOpen && (
@@ -203,15 +174,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
           />
           <div className="absolute top-0 left-0 h-full w-72 bg-cloud shadow-xl p-6 flex flex-col gap-1">
             <div className="flex items-center justify-between mb-6">
-              <Link
-                to="/"
-                className="flex items-center gap-2"
-              >
-                <img
-                  src={logo}
-                  alt="Our Web Logo"
-                  className="max-w-25"
-                />
+              <Link to="/" className="flex items-center gap-2">
+                <img src={logo} alt="Our Web Logo" className="max-w-25" />
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
@@ -236,21 +200,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
             >
               Blogs
               <ChevronDown
-                className={`w-4 h-4 transition-transform ${mobileBlogsOpen ? "rotate-180" : ""
-                  }`}
+                className={`w-4 h-4 transition-transform ${mobileBlogsOpen ? "rotate-180" : ""}`}
               />
             </button>
-            
+
             {mobileBlogsOpen && (
               <div className="pl-4 flex flex-col border-b border-gray-100 pb-2">
                 {BLOG_CATEGORIES.map((cat) => (
                   <Link
                     key={cat}
-                    to={
-                      cat === "All"
-                        ? "/blogs"
-                        : `/blogs?category=${cat.toLowerCase()}`
-                    }
+                    to={cat === "All" ? "/blogs" : `/blogs?category=${cat.toLowerCase()}`}
                     onClick={() => setMobileOpen(false)}
                     className="py-2 text-sm text-muted"
                   >
@@ -275,6 +234,36 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
               Contact Us
             </Link>
 
+            {isLoggedIn && (
+              <>
+                <Link
+                  to="/edit-profile"
+                  onClick={() => setMobileOpen(false)}
+                  className="py-3 flex items-center gap-2 font-body text-ink border-b border-gray-100"
+                >
+                  <Pencil className="w-4 h-4" />
+                  Edit profile
+                </Link>
+                <Link
+                  to="/my-blogs"
+                  onClick={() => setMobileOpen(false)}
+                  className="py-3 flex items-center gap-2 font-body text-ink border-b border-gray-100"
+                >
+                  <NotebookText className="w-4 h-4" />
+                  My blogs
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileOpen(false);
+                    signOut();
+                  }}
+                  className="py-3 flex items-center gap-2 text-left text-red-700"
+                >
+                  <LogOut className="w-4 h-4" /> Logout
+                </button>
+              </>
+            )}
+
             <Link
               to={getStartedLink}
               onClick={() => setMobileOpen(false)}
@@ -282,14 +271,11 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = true, userAvatarUrl }: Nav
             >
               {getStartedLabel}
             </Link>
-
           </div>
         </div>
       )}
     </>
   );
-}
+};
 
-export default Navbar
-
-
+export default Navbar;

@@ -2,8 +2,24 @@ import React from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logos/LogoSmall.png"
+import { useAuth } from "../../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { forgetPasswordSchema, type ForgetPasswordFormData } from "../../validations/auth.validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const ForgotPassword: React.FC = () => {
+    const { forgotPassword } = useAuth();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<ForgetPasswordFormData>({
+        resolver: zodResolver(forgetPasswordSchema),
+    });
+    const onSubmit = async (data: ForgetPasswordFormData) => {
+        await forgotPassword(data);
+    };
     return (
         <section className="min-h-screen w-full bg-cloud">
             <div className="grid min-h-screen   lg:grid-cols-2">
@@ -43,7 +59,9 @@ const ForgotPassword: React.FC = () => {
                         </div>
 
                         {/* Form */}
-                        <form className="mt-10 space-y-6">
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="mt-10 space-y-6">
                             {/* Email */}
                             <div>
                                 <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -51,41 +69,38 @@ const ForgotPassword: React.FC = () => {
                                 </label>
 
                                 <input
+                                    {...register("email")}
                                     type="email"
                                     placeholder="Enter your email address"
-                                    className="
-                    w-full
-                    rounded-xl
-                    border
-                    border-gray-300
-                    px-4
-                    py-2
-                    outline-none
-                    transition
-                    focus:border-purple
-                    focus:ring-2
-                    focus:ring-purple/20
-                  "
+                                    className="w-full rounded-xl border border-gray-300 px-4 py-2 outline-none transition focus:border-purple focus:ring-2 focus:ring-purple/20 "
                                 />
+                                {errors.email && (
+                                    <p className="mt-1 text-sm text-red-500">
+                                        {errors.email.message}
+                                    </p>
+                                )}
                             </div>
 
                             {/* Send Reset Link */}
                             <button
+                                disabled={isSubmitting}
+
                                 type="submit"
                                 className="
-                  w-full
-                  rounded-xl
-                  bg-purple
-                  px-6
-                  py-3
-                  font-semibold
-                  text-white
-                  transition
-                  hover:bg-purple/90
-                  hover:shadow-lg
-                "
-                            >
-                                Send Reset Link
+                                w-full
+                                rounded-xl
+                                bg-purple
+                                px-6
+                                py-3
+                                font-semibold
+                                text-white
+                                transition
+                                hover:bg-purple/90
+                                hover:shadow-lg
+                                ">
+
+                                {isSubmitting ? "Sending..." : "Send Reset Link"}
+
                             </button>
 
                         </form>
@@ -100,21 +115,21 @@ const ForgotPassword: React.FC = () => {
                         </div>
 
                         {/* Back to Login */}
-                        <a
-                            href="/login"
+                        <Link
+                            to="/login"
                             className="
-                inline-flex
-                items-center
-                gap-2
-                font-medium
-                text-purple
-                transition
-                hover:gap-3
-              "
+                            inline-flex
+                            items-center
+                            gap-2
+                            font-medium
+                            text-purple
+                            transition
+                            hover:gap-3
+                        "
                         >
                             <ArrowLeft size={18} />
                             Back to Login
-                        </a>
+                        </Link>
 
                     </div>
                 </div>
