@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import Blogs from './pages/blog/Blogs'
 import AboutUs from './pages/AboutUs'
 import ContactUs from './pages/ContactUs'
+import PageNotFound from './pages/PageNotFound'
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
@@ -29,6 +30,7 @@ function App() {
       <Toaster position="top-right" />
       <BrowserRouter>
         <Routes>
+
           <Route element={<MainLayout />}>
             {/* Public */}
             <Route path="/" element={<Home />} />
@@ -38,6 +40,7 @@ function App() {
             <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path='/terms-conditions' element={<TermsConditions />} />
             <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+            <Route path="*" element={<PageNotFound />} />
 
             {/* Private — must be logged in */}
             <Route element={<PrivateRoute />}>

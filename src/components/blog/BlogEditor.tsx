@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
@@ -53,9 +53,13 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
     },
   });
 
-  if (!editor) {
-    return null;
-  }
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || "", {
+        emitUpdate: false,
+      });
+    }
+  }, [value, editor]);
 
   const setLink = () => {
     const previousUrl = editor.getAttributes("link").href;
@@ -119,11 +123,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           onClick={() =>
             editor.chain().focus().toggleBold().run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("bold")
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("bold")
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <Bold size={18} />
         </button>
@@ -135,11 +138,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           onClick={() =>
             editor.chain().focus().toggleItalic().run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("italic")
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("italic")
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <Italic size={18} />
         </button>
@@ -151,11 +153,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           onClick={() =>
             editor.chain().focus().toggleStrike().run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("strike")
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("strike")
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <Strikethrough size={18} />
         </button>
@@ -173,11 +174,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
               .toggleHeading({ level: 1 })
               .run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("heading", { level: 1 })
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("heading", { level: 1 })
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <Heading1 size={18} />
         </button>
@@ -193,11 +193,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
               .toggleHeading({ level: 2 })
               .run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("heading", { level: 2 })
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("heading", { level: 2 })
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <Heading2 size={18} />
         </button>
@@ -213,11 +212,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
               .toggleHeading({ level: 3 })
               .run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("heading", { level: 3 })
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("heading", { level: 3 })
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <Heading3 size={18} />
         </button>
@@ -231,11 +229,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           onClick={() =>
             editor.chain().focus().toggleBulletList().run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("bulletList")
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("bulletList")
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <List size={18} />
         </button>
@@ -247,11 +244,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           onClick={() =>
             editor.chain().focus().toggleOrderedList().run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("orderedList")
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("orderedList")
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <ListOrdered size={18} />
         </button>
@@ -263,11 +259,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           onClick={() =>
             editor.chain().focus().toggleBlockquote().run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("blockquote")
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("blockquote")
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <Quote size={18} />
         </button>
@@ -279,11 +274,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           onClick={() =>
             editor.chain().focus().toggleCodeBlock().run()
           }
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("codeBlock")
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("codeBlock")
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <Code size={18} />
         </button>
@@ -295,11 +289,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           type="button"
           title="Add Link"
           onClick={setLink}
-          className={`rounded-lg p-2 transition ${
-            editor.isActive("link")
-              ? "bg-purple text-white"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
+          className={`rounded-lg p-2 transition ${editor.isActive("link")
+            ? "bg-purple text-white"
+            : "text-gray-600 hover:bg-gray-200"
+            }`}
         >
           <LinkIcon size={18} />
         </button>
