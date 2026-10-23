@@ -22,7 +22,21 @@ export interface Blog {
     category: Category;
     authorId: number;
     author: BlogAuthor;
+    featuredOrder?: number | null;
+    isLiked?: boolean;
+    _count?: { blogLikes: number };
     createdAt: string;
     updatedAt: string;
 }
 
+export interface BlogPagination {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+}
+
+export interface PaginatedBlogs {
+    blogs: Blog[];
+    pagination: BlogPagination;
+}

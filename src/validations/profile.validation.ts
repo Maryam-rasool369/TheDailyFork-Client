@@ -29,6 +29,11 @@ export const changePasswordSchema = z
         path: ["confirmPassword"],
     });
 
+// Same shape as changePasswordSchema (newPassword + confirmPassword) — used
+// for Google-only accounts that don't have a current password to verify.
+export const setPasswordSchema = changePasswordSchema;
+
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
 export type VerifyPasswordFormData = z.infer<typeof verifyPasswordSchema>;
 export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
+export type SetPasswordFormData = z.infer<typeof setPasswordSchema>;

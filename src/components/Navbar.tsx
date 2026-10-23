@@ -100,13 +100,20 @@ const Navbar: React.FC = () => {
             <Link to="/about" className="hover:text-purple transition-colors">
               About
             </Link>
-            <Link to="/contact" className="hover:text-purple transition-colors">
-              Contact Us
+            <Link to="/account" className="hover:text-purple transition-colors">
+              Account
             </Link>
           </div>
 
           {/* Right: Get started button + profile */}
           <div className="flex items-center gap-4">
+            <Link
+              to="/pricing"
+              className="hidden sm:inline-block bg-moss hover:bg-moss/90 text-cloud font-bold text-sm px-5 py-2.5 rounded-full transition-colors"
+            >
+              Subscribe
+            </Link>
+
             <Link
               to={getStartedLink}
               className="hidden sm:inline-block bg-purple-soft hover:bg-purple text-ink font-bold text-sm px-5 py-2.5 rounded-full transition-colors"
@@ -232,6 +239,14 @@ const Navbar: React.FC = () => {
               className="py-3 font-body text-ink border-b border-gray-100"
             >
               Contact Us
+            </Link>
+
+            <Link
+              to="/pricing"
+              onClick={() => setMobileOpen(false)}
+              className="py-3 font-body text-ink border-b border-gray-100"
+            >
+              Subscribe
             </Link>
 
             {isLoggedIn && (

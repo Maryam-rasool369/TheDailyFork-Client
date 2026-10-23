@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Heart } from "lucide-react";
 import { DEFAULT_AVATAR } from "../../common/constants";
 import { Link } from "react-router-dom";
 import type { Blog } from "../../common/types/blogType";
@@ -76,8 +76,15 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
                                         {authorName}
                                     </h4>
 
-                                    <p className="mt-0.5 text-xs text-gray-500">
+                                    <p className="mt-0.5 flex items-center gap-2 text-xs text-gray-500">
                                         {formatDate(blog.createdAt)}
+
+                                        {blog._count && (
+                                            <span className="inline-flex items-center gap-1">
+                                                <Heart className={`h-3 w-3 ${blog.isLiked ? "fill-red-500 text-red-500" : ""}`} />
+                                                {blog._count.blogLikes}
+                                            </span>
+                                        )}
                                     </p>
                                 </div>
                             </div>
