@@ -10,8 +10,21 @@ import logo from "../../assets/logos/LogoSmall.png"
 import AuthHero from "../../components/auth/AuthHero";
 import AuthButtons from "../../components/auth/AuthButtons";
 import TermsConditionsPrivacy from "../../components/auth/TermsConditionsPrivacy";
+import type { LoginFormData } from "../../validations/auth.validation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "../../validations/auth.validation";
+import { useAuth } from "../../hooks/useAuth";
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
+    await login(data);
+  };
 
   return (
     <section className="min-h-screen bg-cloud">
@@ -64,7 +77,7 @@ const Login: React.FC = () => {
             </div>
 
             {/* Form Starts Here */}
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Email */}
               <div>
                 <label
@@ -78,11 +91,14 @@ const Login: React.FC = () => {
                   <Mail className="h-5 w-5 text-gray-400" />
 
                   <input
+                    {...register("email")}
                     id="email"
                     type="email"
                     placeholder="Enter your email"
                     className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                   />
+                  {errors.email && <p>{errors.email.message}</p>}
+
                 </div>
               </div>
 
@@ -99,11 +115,14 @@ const Login: React.FC = () => {
                   <Lock className="h-5 w-5 text-gray-400" />
 
                   <input
+                    {...register("password")}
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                   />
+                  {errors.password && <p>{errors.password.message}</p>}
+
 
                   <button
                     type="button"
@@ -132,9 +151,11 @@ const Login: React.FC = () => {
               {/* Login Button */}
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full rounded-xl bg-purple py-3 font-semibold text-white transition duration-200 hover:bg-purple/90 active:scale-[0.98]"
               >
-                Login
+                {isSubmitting ? "Logging in..." : "Login"}
+
               </button>
 
               {/* Sign Up */}
