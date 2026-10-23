@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import {
     Calendar,
@@ -7,10 +5,11 @@ import {
     Loader2,
     X,
 } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import OwnerActions from "../../components/blog/OwnerActions";
+import LikeButton from "../../components/blog/LikeButton";
 import { useBlogDetails, useDeleteBlog } from "../../hooks/useBlog";
 import { useAuthStore } from "../../store/authStore";
 import { DEFAULT_AVATAR } from "../../common/constants";
@@ -25,11 +24,12 @@ const formatDate = (isoDate: string) =>
 
 const BlogDetails = () => {
     const { id } = useParams<{ id: string }>();
+    const blogId = id ? parseInt(id, 10) : undefined; //10 means base 10, which is the normal decimal number system.
     const navigate = useNavigate();
 
     const user = useAuthStore((s) => s.user);
 
-    const { blog, loading } = useBlogDetails(id);
+    const { blog, loading } = useBlogDetails(blogId);
     const { deleteBlog, isDeleting } = useDeleteBlog();
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -157,6 +157,17 @@ const BlogDetails = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Like */}
+                            {blog.status === "APPROVED" && (
+                                <div className="mt-6">
+                                    <LikeButton
+                                        blogId={blog.id}
+                                        initialLiked={blog.isLiked ?? false}
+                                        initialCount={blog._count?.blogLikes ?? 0}
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         {/* RIGHT — Image */}
@@ -219,6 +230,17 @@ const BlogDetails = () => {
                             "
                         >
                             {renderBlogContent(blog.content)}
+
+                            {!user && (
+                                <p className="not-prose mt-4">
+                                    <Link
+                                        to="/login"
+                                        className="font-semibold text-yellow-700 hover:underline"
+                                    >
+                                        Read more...
+                                    </Link>
+                                </p>
+                            )}
                         </article>
                     </section>
                 </div>

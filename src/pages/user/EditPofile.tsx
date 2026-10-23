@@ -5,25 +5,31 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useProfile } from "../../hooks/useProfile";
 import { usePasswordChange } from "../../hooks/usePasswordChange";
+import { useSetPassword } from "../../hooks/useSetPassword";
 import { useAuth } from "../../hooks/useAuth";
 import { DEFAULT_AVATAR } from "../../common/constants";
 import {
     updateProfileSchema,
     verifyPasswordSchema,
     changePasswordSchema,
+    setPasswordSchema,
     type UpdateProfileFormData,
     type VerifyPasswordFormData,
     type ChangePasswordFormData,
+    type SetPasswordFormData,
 } from "../../validations/profile.validation";
 
 const EditProfile: React.FC = () => {
     const { profile, loading, updateProfile } = useProfile();
     const { isVerified, verifying, changing, verify, changePassword, reset: resetVerification } = usePasswordChange();
+    const { setting, setPassword } = useSetPassword();
     const { signOut } = useAuth();
 
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [showSetNewPassword, setShowSetNewPassword] = useState(false);
+    const [showSetConfirmPassword, setShowSetConfirmPassword] = useState(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -51,6 +57,15 @@ const EditProfile: React.FC = () => {
         formState: { errors: newPasswordErrors },
     } = useForm<ChangePasswordFormData>({
         resolver: zodResolver(changePasswordSchema),
+    });
+
+    const {
+        register: registerSetPassword,
+        handleSubmit: handleSetPasswordSubmit,
+        reset: resetSetPasswordForm,
+        formState: { errors: setPasswordErrors },
+    } = useForm<SetPasswordFormData>({
+        resolver: zodResolver(setPasswordSchema),
     });
 
     useEffect(() => {
@@ -88,6 +103,12 @@ const EditProfile: React.FC = () => {
         resetPasswordForm();
         resetVerification();
         signOut(); // force re-login after password change, per requirement
+    };
+
+    const onSetPasswordSubmit = async (data: SetPasswordFormData) => {
+        await setPassword(data.newPassword);
+        resetSetPasswordForm();
+        signOut(); // force re-login after setting a password, same as change password
     };
 
     if (loading) {
@@ -237,6 +258,73 @@ const EditProfile: React.FC = () => {
                 {/* Password & Security */}
                 <div>
                     <h2 className="text-2xl font-semibold text-ink">Password & Security</h2>
+
+                    {profile && !profile.hasPassword ? (
+                        <>
+                            <p className="mt-2 text-gray-500">
+                                Your account was created with Google sign-in and doesn't have a
+                                password yet. Set one so you can also log in with your email
+                                and password.
+                            </p>
+
+                            <form onSubmit={handleSetPasswordSubmit(onSetPasswordSubmit)} className="mt-8">
+                                <div>
+                                    <label className="mb-2 block text-sm font-medium text-gray-700">New Password</label>
+                                    <div className="relative">
+                                        <input
+                                            type={showSetNewPassword ? "text" : "password"}
+                                            placeholder="Enter a new password"
+                                            {...registerSetPassword("newPassword")}
+                                            className="w-full rounded-xl border border-gray-300 px-4 py-3 pr-12 outline-none transition focus:border-purple focus:ring-2 focus:ring-purple/20"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowSetNewPassword(!showSetNewPassword)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple"
+                                        >
+                                            {showSetNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        </button>
+                                    </div>
+                                    {setPasswordErrors.newPassword && (
+                                        <p className="mt-1 text-sm text-red-600">{setPasswordErrors.newPassword.message}</p>
+                                    )}
+                                </div>
+
+                                <div className="mt-6">
+                                    <label className="mb-2 block text-sm font-medium text-gray-700">Confirm Password</label>
+                                    <div className="relative">
+                                        <input
+                                            type={showSetConfirmPassword ? "text" : "password"}
+                                            placeholder="Confirm your new password"
+                                            {...registerSetPassword("confirmPassword")}
+                                            className="w-full rounded-xl border border-gray-300 px-4 py-3 pr-12 outline-none transition focus:border-purple focus:ring-2 focus:ring-purple/20"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowSetConfirmPassword(!showSetConfirmPassword)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple"
+                                        >
+                                            {showSetConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        </button>
+                                    </div>
+                                    {setPasswordErrors.confirmPassword && (
+                                        <p className="mt-1 text-sm text-red-600">{setPasswordErrors.confirmPassword.message}</p>
+                                    )}
+                                </div>
+
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="submit"
+                                        disabled={setting}
+                                        className="rounded-xl bg-purple px-8 py-3 font-semibold text-white transition hover:bg-purple/90 disabled:opacity-50"
+                                    >
+                                        {setting ? "Saving..." : "Set Password"}
+                                    </button>
+                                </div>
+                            </form>
+                        </>
+                    ) : (
+                    <>
                     <p className="mt-2 text-gray-500">
                         Verify your current password before creating a new one.
                     </p>
@@ -348,6 +436,8 @@ const EditProfile: React.FC = () => {
                             </div>
                         </form>
                     </div>
+                    </>
+                    )}
                 </div>
             </div>
         </section>

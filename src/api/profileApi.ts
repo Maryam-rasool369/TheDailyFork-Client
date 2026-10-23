@@ -38,3 +38,7 @@ export const changePasswordApi = async (
 ): Promise<void> => {
     await axiosClient.put(API_ROUTES.PROFILE.CHANGE_PASSWORD, { currentPassword, newPassword });
 };
+
+export const setPasswordApi = async (newPassword: string): Promise<void> => {
+    await axiosClient.post(API_ROUTES.PROFILE.SET_PASSWORD, { newPassword });
+};

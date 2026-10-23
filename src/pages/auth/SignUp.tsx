@@ -197,12 +197,6 @@ const Signup: React.FC = () => {
                     className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                   />
 
-                  {errors.password && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.password.message}
-                    </p>
-                  )}
-
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -215,6 +209,13 @@ const Signup: React.FC = () => {
                     )}
                   </button>
                 </div>
+
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+
               </div>
 
               {/* Confirm Password */}
@@ -230,12 +231,12 @@ const Signup: React.FC = () => {
                   <Lock className="h-5 w-5 text-gray-400" />
 
                   <input
+                    {...register("confirmPassword")}
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm your password"
                     className="w-full bg-transparent px-3 py-2 outline-none placeholder:text-gray-400"
                   />
-
                   <button
                     type="button"
                     onClick={() =>
@@ -249,7 +250,13 @@ const Signup: React.FC = () => {
                       <Eye className="h-5 w-5" />
                     )}
                   </button>
+
                 </div>
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
 
               {/* Create Account Button */}

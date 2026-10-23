@@ -1,14 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { AuthUser } from "../common/types/authType";
 
-export interface AuthUser {
-    id: number;
-    firstName: string;
-    lastName: string | null;
-    email: string;
-    profileImage?: string | null;
-    role?: string;
-}
 
 interface AuthState {
     token: string | null;
@@ -23,7 +16,10 @@ export const useAuthStore = create<AuthState>()(
             token: null,
             user: null,
             setAuth: (token, user) => set({ token, user }),
-            logout: () => set({ token: null, user: null }),
+            logout: () => {
+                set({ token: null, user: null });
+                useAuthStore.persist.clearStorage(); // remove "auth-storage" from localStorage entirely
+            },
         }),
         {
             name: "auth-storage", // key in localStorage

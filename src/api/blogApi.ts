@@ -1,5 +1,5 @@
 import { axiosClient } from "../lib/axiosClient";
-import type { Blog } from "../common/types/blogType";
+import type { Blog, PaginatedBlogs } from "../common/types/blogType";
 import type { CreateBlogFormData } from "../validations/blog.validation";
 // import { useAuthStore } from "../store/authStore";
 import { API_ROUTES } from "../common/constants";
@@ -20,13 +20,46 @@ const buildBlogFormData = (data: Partial<CreateBlogFormData>, imageFile?: File) 
     return formData;
 };
 
-export const getApprovedBlogsApi = async (): Promise<Blog[]> => {
-    const res = await axiosClient.get(API_ROUTES.BLOG.GET_ALL);
+// export const getApprovedBlogsApi = async (): Promise<Blog[]> => {
+//     const res = await axiosClient.get(API_ROUTES.BLOG.GET_ALL);
+//     return res.data.data;
+// };
+
+export const getApprovedBlogsApi = async (
+    page: number,
+    limit: number,
+    search?: string,
+    category?: string,
+    sortBy?: string
+): Promise<PaginatedBlogs> => {
+
+    const res = await axiosClient.get(API_ROUTES.BLOG.GET_ALL, {
+        params: {
+            page,
+            limit,
+            search,
+            category,
+            sortBy,
+        },
+    });
+
     return res.data.data;
 };
 
-export const getMyBlogsApi = async (): Promise<Blog[]> => {
-    const res = await axiosClient.get(API_ROUTES.BLOG.GET_MINE);
+// export const getMyBlogsApi = async (): Promise<Blog[]> => {
+//     const res = await axiosClient.get(API_ROUTES.BLOG.GET_MINE);
+//     return res.data.data;
+// };
+
+export const getMyBlogsApi = async (
+    page: number,
+    limit: number,
+    search?: string
+): Promise<PaginatedBlogs> => {
+    const res = await axiosClient.get(API_ROUTES.BLOG.GET_MINE, {
+        params: { page, limit, search },
+    });
+
     return res.data.data;
 };
 
@@ -64,4 +97,22 @@ export const editBlogApi = async (
 
 export const deleteBlogApi = async (id:  number): Promise<void> => {
     await axiosClient.delete(`/blog/${id}`);
+};
+
+export const getPopularBlogsApi = async (): Promise<Blog[]> => {
+    const res = await axiosClient.get(API_ROUTES.BLOG.POPULAR);
+    return res.data.data;
+};
+
+export const getFeaturedBlogsApi = async (): Promise<Blog[]> => {
+    const res = await axiosClient.get(API_ROUTES.BLOG.FEATURED);
+    return res.data.data;
+};
+
+export const likeBlogApi = async (id: number): Promise<void> => {
+    await axiosClient.post(API_ROUTES.BLOG.LIKE(id));
+};
+
+export const unlikeBlogApi = async (id: number): Promise<void> => {
+    await axiosClient.delete(API_ROUTES.BLOG.LIKE(id));
 };

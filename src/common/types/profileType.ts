@@ -11,4 +11,5 @@ export interface UserProfile {
     birthday: string | null;
     phoneNumber: string | null;
     isVerified: boolean;
+    hasPassword: boolean;
 }
